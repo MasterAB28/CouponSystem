@@ -20,9 +20,6 @@ public class AdminController {
         this.adminFacade = adminFacade;
     }
 
-    public void setAdminFacade(AdminFacade adminFacade) {
-        this.adminFacade = adminFacade;
-    }
 
     @PostMapping("/company")
     public ResponseEntity<?> addCompany(@RequestBody Company company){

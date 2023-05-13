@@ -1,6 +1,7 @@
 package com.example.CouponSystem.login;
 
 import com.auth0.jwt.JWT;
+import com.example.CouponSystem.facade.ClientFacade;
 import org.springframework.stereotype.Component;
 
 import java.util.Calendar;
@@ -8,29 +9,25 @@ import java.util.Calendar;
 @Component
 public class LoginParameters {
     private Calendar calendar;
-    private ClientType clientType;
+    private ClientFacade clientFacade;
 
-    public LoginParameters(String token) {
-        this.calendar =Calendar.getInstance();
-        this.clientType = ClientType.valueOf(JWT.decode(token).getClaim("clientType").asString());
+    public LoginParameters( ClientFacade clientFacade) {
+        this.calendar = Calendar.getInstance();
+        this.clientFacade = clientFacade;
     }
 
     public LoginParameters() {
     }
 
-    public Calendar getDate() {
+    public Calendar getCalendar() {
         return calendar;
     }
 
-    public ClientType getClientType() {
-        return clientType;
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
     }
 
-    @Override
-    public String toString() {
-        return "LoginParameters{" +
-                "date=" + calendar +
-                ", clientType=" + clientType +
-                '}';
+    public ClientFacade getClientFacade() {
+        return clientFacade;
     }
 }

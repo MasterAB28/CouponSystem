@@ -1,6 +1,7 @@
 package com.example.CouponSystem.filter;
 
 import com.example.CouponSystem.CouponSystemApplication;
+import com.example.CouponSystem.login.LoginParameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
@@ -12,23 +13,23 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
 @Order(2)
 public class TokenFilter extends OncePerRequestFilter {
     @Autowired
-    private ApplicationContext ctx;
+    private HashMap<String, LoginParameters> sessions;
 
 
 
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
-        CouponSystemApplication spa=ctx.getBean(CouponSystemApplication.class);
         try {
             String token=request.getHeader("authorization");
-            if (spa.sessions().get(token.replace("Bearer ","")) != null) {
+            if (sessions.get(token.replace("Bearer ","")) != null) {
                 filterChain.doFilter(request, response);
             }
             else {

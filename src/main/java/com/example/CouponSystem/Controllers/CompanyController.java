@@ -4,30 +4,37 @@ import com.example.CouponSystem.beans.Category;
 import com.example.CouponSystem.beans.Coupon;
 import com.example.CouponSystem.exception.ExceptionCoupons;
 import com.example.CouponSystem.facade.CompanyFacade;
+import com.example.CouponSystem.facade.CustomerFacade;
+import com.example.CouponSystem.login.LoginParameters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/company")
 @CrossOrigin(origins = "*")
 public class CompanyController {
-    private CompanyFacade companyFacade;
 
-    public CompanyController(CompanyFacade companyFacade) {
-        this.companyFacade = companyFacade;
-    }
+    @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private HashMap<String, LoginParameters> sessions;
 
-    public void setCompanyFacade(CompanyFacade companyFacade) {
-        this.companyFacade = companyFacade;
+    private CompanyFacade getCompanyFacade(){
+        String token=request.getHeader("authorization");
+        token = token.replace("Bearer ","");
+        return (CompanyFacade) sessions.get(token).getClientFacade();
     }
 
     @PostMapping("/coupon")
     public ResponseEntity<?>addCoupon(@RequestBody Coupon coupon){
         try {
-            companyFacade.addCoupon(coupon);
+            getCompanyFacade().addCoupon(coupon);
             return new ResponseEntity<>(HttpStatus.CREATED);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -36,7 +43,7 @@ public class CompanyController {
     @PutMapping("/coupon")
     public ResponseEntity<?>updateCoupon(@RequestBody Coupon coupon){
         try {
-            companyFacade.updateCoupon(coupon);
+            getCompanyFacade().updateCoupon(coupon);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -46,7 +53,7 @@ public class CompanyController {
     @DeleteMapping("/coupon/{couponId}")
     public ResponseEntity<?> deleteCouponById(@PathVariable int couponId){
         try {
-            companyFacade.deleteCouponById(couponId);
+            getCompanyFacade().deleteCouponById(couponId);
             return new ResponseEntity<>(HttpStatus.OK);
         }catch (ExceptionCoupons e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -54,20 +61,20 @@ public class CompanyController {
     }
     @GetMapping("/coupons")
     public List<Coupon> getAllCompanyCoupons(){
-        return companyFacade.getCompanyCoupons();
+        return getCompanyFacade().getCompanyCoupons();
     }
     @GetMapping("/coupons/category")
     public List<Coupon>getAllCompanyCoupons(@RequestBody Category category){
-        return companyFacade.getCompanyCoupons(category);
+        return getCompanyFacade().getCompanyCoupons(category);
     }
     @GetMapping("/coupons/{maxPrice}")
     public List<Coupon>getAllCompanyCoupons(@PathVariable double maxPrice){
-        return companyFacade.getCompanyCoupons(maxPrice);
+        return getCompanyFacade().getCompanyCoupons(maxPrice);
     }
     @GetMapping()
     public ResponseEntity<?>getCompanyDetails(){
         try {
-            return ResponseEntity.ok().body(companyFacade.getCompanyDetails());
+            return ResponseEntity.ok().body(getCompanyFacade().getCompanyDetails());
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

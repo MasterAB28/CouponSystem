@@ -1,6 +1,8 @@
 package com.example.CouponSystem.beans;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 @Entity
@@ -11,6 +13,7 @@ public class Company {
     private int id;
     private String name, email, password;
     @OneToMany(mappedBy = "company",fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Coupon> coupons;
 
     public Company() {

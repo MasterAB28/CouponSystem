@@ -21,7 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("auth")
@@ -33,67 +35,56 @@ public class AuthController {
     private CompanyRepository companyRepository;
     @Autowired
     private CustomerRepository customerRepository;
+    @Autowired
+    private HashMap<String, LoginParameters> sessions;
 
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginReq loginReq) {
-        LoginManager loginManager=ctx.getBean(LoginManager.class);
-        CouponSystemApplication spa=ctx.getBean(CouponSystemApplication.class);
+        LoginManager loginManager = ctx.getBean(LoginManager.class);
         ClientFacade clientFacade = loginManager.login(loginReq.getEmail(), loginReq.getPassword(), loginReq.getClientType());
-        switch(loginReq.getClientType()){
-            case Administrator:
-                AdminController adminController = ctx.getBean(AdminController.class);
-                adminController.setAdminFacade((AdminFacade) clientFacade);
-                break;
-            case Company:
-                CompanyController companyController = ctx.getBean(CompanyController.class);
-                companyController.setCompanyFacade((CompanyFacade) clientFacade);
-                break;
-            case Customer:
-                CustomerController customerController = ctx.getBean(CustomerController.class);
-                customerController.setCustomerFacade((CustomerFacade) clientFacade);
-                break;
-        }
         if (clientFacade != null) {
-            String token=createToken(loginReq);
-            spa.sessions().put(token, new LoginParameters(token));
+            String token = createToken(loginReq);
+            sessions.put(token, new LoginParameters(clientFacade));
             return ResponseEntity.ok().body(token);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you are not register!");
     }
 
+    @PostMapping("/logout")
+    public void logout(HttpServletRequest request) {
+        String token = request.getHeader("authorization");
+        sessions.remove(token.replace("Bearer ", ""));
+    }
 
-    private String createToken(LoginReq loginReq){
-        String token=null;
-        switch (loginReq.getClientType()){
+    private String createToken(LoginReq loginReq) {
+        String token = null;
+        switch (loginReq.getClientType()) {
             case Administrator:
                 token = JWT.create()
-                        .withClaim("name","Admin")
-                        .withClaim("clientType","Administrator")
-                        .withClaim("email","admin@gmail.com")
+                        .withClaim("name", "Admin")
+                        .withClaim("clientType", "Administrator")
                         .withIssuer("JohnCoupon")
                         .withIssuedAt(new Date())
                         .sign(Algorithm.none());
                 break;
 
             case Company:
-                Company company=companyRepository.findByEmailAndPassword(loginReq.getEmail(),loginReq.getPassword());
+                Company company = companyRepository.findByEmailAndPassword(loginReq.getEmail(), loginReq.getPassword());
 
                 token = JWT.create()
-                        .withClaim("name",company.getName())
-                        .withClaim("clientType","Company")
-                        .withClaim("email",company.getEmail())
+                        .withClaim("name", company.getName())
+                        .withClaim("clientType", "Company")
                         .withIssuer("JohnCoupon")
                         .withIssuedAt(new Date())
                         .sign(Algorithm.none());
                 break;
             case Customer:
-                Customer customer=customerRepository.findByEmailAndPassword(loginReq.getEmail(),loginReq.getPassword());
+                Customer customer = customerRepository.findByEmailAndPassword(loginReq.getEmail(), loginReq.getPassword());
 
                 token = JWT.create()
-                        .withClaim("name",customer.getFirstName()+" "+customer.getLastName())
-                        .withClaim("clientType","Customer")
-                        .withClaim("email",customer.getEmail())
+                        .withClaim("name", customer.getFirstName() + " " + customer.getLastName())
+                        .withClaim("clientType", "Customer")
                         .withIssuer("JohnCoupon")
                         .withIssuedAt(new Date())
                         .sign(Algorithm.none());

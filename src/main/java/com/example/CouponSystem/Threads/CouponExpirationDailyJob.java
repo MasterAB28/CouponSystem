@@ -25,6 +25,7 @@ public class CouponExpirationDailyJob implements Runnable {
     }
 
 
+
     /**
      * The method is Override to method 'run' and checks if this thread is not quit
      *if not, the check expired have called
