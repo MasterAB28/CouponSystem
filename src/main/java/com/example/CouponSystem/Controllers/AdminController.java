@@ -25,7 +25,7 @@ public class AdminController {
     public ResponseEntity<?> addCompany(@RequestBody Company company){
         try{
             adminFacade.addCompany(company);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(company);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -34,7 +34,7 @@ public class AdminController {
     public ResponseEntity<?>updateCompany(@RequestBody Company company){
         try {
             adminFacade.updateCompany(company);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(company);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -64,7 +64,7 @@ public class AdminController {
     public ResponseEntity<?>addCustomer(@RequestBody Customer customer){
         try {
             adminFacade.addCustomer(customer);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(customer);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -73,7 +73,7 @@ public class AdminController {
     public ResponseEntity<?>updateCustomer(@RequestBody Customer customer){
         try {
             adminFacade.updateCustomer(customer);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(customer);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

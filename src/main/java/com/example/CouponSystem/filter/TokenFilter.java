@@ -13,6 +13,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class TokenFilter extends OncePerRequestFilter {
         try {
             String token=request.getHeader("authorization");
             if (sessions.get(token.replace("Bearer ","")) != null) {
+                sessions.get(token.replace("Bearer ","")).setCalendar(Calendar.getInstance());
                 filterChain.doFilter(request, response);
             }
             else {

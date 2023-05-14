@@ -35,7 +35,7 @@ public class CompanyController {
     public ResponseEntity<?>addCoupon(@RequestBody Coupon coupon){
         try {
             getCompanyFacade().addCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.CREATED);
+            return ResponseEntity.status(HttpStatus.CREATED).body(coupon);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -44,7 +44,7 @@ public class CompanyController {
     public ResponseEntity<?>updateCoupon(@RequestBody Coupon coupon){
         try {
             getCompanyFacade().updateCoupon(coupon);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.status(HttpStatus.OK).body(coupon);
         } catch (ExceptionCoupons e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

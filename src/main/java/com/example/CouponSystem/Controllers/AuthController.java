@@ -51,9 +51,8 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you are not register!");
     }
 
-    @PostMapping("/logout")
-    public void logout(HttpServletRequest request) {
-        String token = request.getHeader("authorization");
+    @PostMapping("/logout/{token}")
+    public void logout(@PathVariable String token) {
         sessions.remove(token.replace("Bearer ", ""));
     }
 
