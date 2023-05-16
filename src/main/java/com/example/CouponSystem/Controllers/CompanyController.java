@@ -59,19 +59,19 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    @GetMapping("/coupons")
+    @GetMapping("/coupon")
     public List<Coupon> getAllCompanyCoupons(){
         return getCompanyFacade().getCompanyCoupons();
     }
-    @GetMapping("/coupons/category")
+    @GetMapping("/coupon/category")
     public List<Coupon>getAllCompanyCoupons(@RequestBody Category category){
         return getCompanyFacade().getCompanyCoupons(category);
     }
-    @GetMapping("/coupons/{maxPrice}")
+    @GetMapping("/coupon/{maxPrice}")
     public List<Coupon>getAllCompanyCoupons(@PathVariable double maxPrice){
         return getCompanyFacade().getCompanyCoupons(maxPrice);
     }
-    @GetMapping()
+    @GetMapping("/details")
     public ResponseEntity<?>getCompanyDetails(){
         try {
             return ResponseEntity.ok().body(getCompanyFacade().getCompanyDetails());

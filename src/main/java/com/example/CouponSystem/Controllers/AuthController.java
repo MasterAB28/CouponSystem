@@ -16,6 +16,7 @@ import com.example.CouponSystem.repository.CompanyRepository;
 import com.example.CouponSystem.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("auth")
+
 public class AuthController {
     @Autowired
     private ApplicationContext ctx;
@@ -48,12 +50,17 @@ public class AuthController {
             sessions.put(token, new LoginParameters(clientFacade));
             return ResponseEntity.ok().body(token);
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("you are not register!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("email or password incorrect!");
     }
 
-    @PostMapping("/logout/{token}")
-    public void logout(@PathVariable String token) {
-        sessions.remove(token.replace("Bearer ", ""));
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (sessions.get(token.replace("Bearer ", "")) != null){
+            sessions.remove(token.replace("Bearer ", ""));
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     private String createToken(LoginReq loginReq) {

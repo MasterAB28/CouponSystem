@@ -48,6 +48,7 @@ public class TokenFilter extends OncePerRequestFilter {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         List<String> excludeUrlPatterns = List.of(
                 "/auth/login",
+                "/auth/logout",
                 "/"
         );
         return excludeUrlPatterns
