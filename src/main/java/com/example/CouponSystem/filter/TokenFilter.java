@@ -39,8 +39,8 @@ public class TokenFilter extends OncePerRequestFilter {
                 response.getWriter().write("Your connection has been disconnected, please log in!");
             }
         }catch (Exception e){
-            response.setStatus(401);
-            response.getWriter().write("invalid,please log in!");
+            response.setStatus(400);
+            response.getWriter().write(e.getMessage());
         }
     }
     @Override
@@ -48,8 +48,7 @@ public class TokenFilter extends OncePerRequestFilter {
         AntPathMatcher pathMatcher = new AntPathMatcher();
         List<String> excludeUrlPatterns = List.of(
                 "/auth/login",
-                "/auth/logout",
-                "/"
+                "/auth/logout"
         );
         return excludeUrlPatterns
                 .stream()

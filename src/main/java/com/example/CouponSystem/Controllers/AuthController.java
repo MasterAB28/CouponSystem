@@ -9,6 +9,7 @@ import com.example.CouponSystem.facade.AdminFacade;
 import com.example.CouponSystem.facade.ClientFacade;
 import com.example.CouponSystem.facade.CompanyFacade;
 import com.example.CouponSystem.facade.CustomerFacade;
+import com.example.CouponSystem.login.ClientType;
 import com.example.CouponSystem.login.LoginManager;
 import com.example.CouponSystem.login.LoginParameters;
 import com.example.CouponSystem.login.LoginReq;

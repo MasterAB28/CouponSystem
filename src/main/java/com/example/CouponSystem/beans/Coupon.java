@@ -8,6 +8,7 @@ import javax.persistence.*;
 import java.sql.Date;
 import java.util.Set;
 
+import lombok.NonNull;
 import lombok.ToString;
 
 
@@ -21,10 +22,17 @@ public class Coupon {
     @ManyToOne()
     private Company company;
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Category category;
+    @Column(nullable = false)
     private String title, description;
-    private Date startDate, endDate;
+    @Column(nullable = false)
+    private Date startDate;
+    @Column(nullable = false)
+    private Date endDate;
+    @Column(nullable = false)
     private int amount;
+    @Column(nullable = false)
     private double price;
     private String image;
     @ManyToMany(mappedBy = "coupons",fetch = FetchType.EAGER)
@@ -34,8 +42,7 @@ public class Coupon {
     public Coupon() {
     }
 
-    public Coupon(Company company, Category category, String title, String description, Date startDate, Date endDate, int amount, double price, String image) {
-        this.company = company;
+    public Coupon(Category category, String title, String description, Date startDate, Date endDate, int amount, double price, String image) {
         this.category = category;
         this.title = title;
         this.description = description;

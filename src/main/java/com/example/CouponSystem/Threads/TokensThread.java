@@ -20,7 +20,7 @@ public class TokensThread implements Runnable {
         while (true) {
             try {
                 checkTokens();
-                Thread.sleep(1000*60);
+                Thread.sleep(1000*60*30);
             } catch (InterruptedException e) {
                 System.out.println(e.getMessage());
             }
