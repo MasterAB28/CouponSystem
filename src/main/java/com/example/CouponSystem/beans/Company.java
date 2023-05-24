@@ -11,6 +11,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(nullable = false)
     private String name, email, password;
     @OneToMany(mappedBy = "company",fetch = FetchType.EAGER)
     @JsonIgnore

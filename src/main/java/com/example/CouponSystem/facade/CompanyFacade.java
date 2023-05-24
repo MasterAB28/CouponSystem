@@ -60,11 +60,12 @@ public class CompanyFacade extends ClientFacade{
      * @throws ExceptionCoupons if the coupon is not exist
      */
     public void updateCoupon(Coupon coupon) throws ExceptionCoupons {
-        if (couponRepo.existsById(coupon.getId())) {
-            couponRepo.save(coupon);
+        if (!couponRepo.findById(coupon.getId()).orElseThrow(()->new ExceptionCoupons("The id not found")).getTitle().equals(coupon.getTitle())) {
+            if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(),coupon.getCompany().getId())) {
+                throw new ExceptionCoupons("This title is exists for your company");
+            }
         }
-        else
-            throw new ExceptionCoupons("coupon is not exists");
+        couponRepo.save(coupon);
     }
 
     /**

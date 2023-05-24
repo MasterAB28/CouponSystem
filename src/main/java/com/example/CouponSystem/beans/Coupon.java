@@ -34,6 +34,7 @@ public class Coupon {
     private int amount;
     @Column(nullable = false)
     private double price;
+    @Column(columnDefinition="TEXT")
     private String image;
     @ManyToMany(mappedBy = "coupons",fetch = FetchType.EAGER)
     @JsonIgnore
