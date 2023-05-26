@@ -52,7 +52,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    @GetMapping("/")
+    @GetMapping("/coupon")
     public ResponseEntity<?>getCustomerCoupons(){
         try {
             return ResponseEntity.ok().body(getCustomerFacade().getCustomerCoupons());
@@ -81,7 +81,7 @@ public class CustomerController {
     public List<Coupon> getAllCoupons(){
         return getCustomerFacade().getAllCoupons();
     }
-    @GetMapping
+    @GetMapping("/details")
     public ResponseEntity<?> getCustomerDetails(){
         try {
             return ResponseEntity.ok().body(getCustomerFacade().getCustomerDetails());

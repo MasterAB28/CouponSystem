@@ -30,4 +30,6 @@ public interface CompanyRepository extends JpaRepository<Company,Integer> {
      */
     Company findByEmailAndPassword(String email, String password);
 
+    boolean existsByEmail(String email);
+
 }

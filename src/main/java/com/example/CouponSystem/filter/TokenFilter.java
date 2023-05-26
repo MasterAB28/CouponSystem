@@ -1,9 +1,8 @@
 package com.example.CouponSystem.filter;
 
-import com.example.CouponSystem.CouponSystemApplication;
+
 import com.example.CouponSystem.login.LoginParameters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -39,8 +38,8 @@ public class TokenFilter extends OncePerRequestFilter {
                 response.getWriter().write("Your connection has been disconnected, please log in!");
             }
         }catch (Exception e){
-            response.setStatus(400);
-            response.getWriter().write(e.getMessage());
+            response.setStatus(403);
+            response.getWriter().write("Invalid to your role!");
         }
     }
     @Override

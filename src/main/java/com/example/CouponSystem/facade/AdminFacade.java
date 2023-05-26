@@ -60,6 +60,8 @@ public class AdminFacade extends ClientFacade{
         if (!companyToCheck.getName().equals(company.getName())) {
             throw new ExceptionCoupons("The company name cannot be updated");
         }
+        if (!companyToCheck.getEmail().equals(company.getEmail()) && companyRepo.existsByEmail(company.getEmail()))
+            throw new ExceptionCoupons("The email is exists already");
         companyRepo.save(company);
 
     }
@@ -125,11 +127,9 @@ public class AdminFacade extends ClientFacade{
      * @throws ExceptionCoupons if the customers' id is not exists
      */
     public void updateCustomer(Customer customer) throws ExceptionCoupons{
-        if (customerRepo.existsById(customer.getId())) {
-            customerRepo.save(customer);
-            return;
-        }
-        throw new ExceptionCoupons("the customer was not found");
+        if (!getOneCustomer(customer.getId()).getEmail().equals(customer.getEmail()))
+            throw new ExceptionCoupons("This email exists");
+        customerRepo.save(customer);
     }
 
     /**
