@@ -29,7 +29,7 @@ public class TokensThread implements Runnable {
     public void checkTokens(){
         Calendar calendar=Calendar.getInstance();
         for (Map.Entry<String,LoginParameters> s : sessions.entrySet()) {
-            if (calendar.getTimeInMillis() - s.getValue().getCalendar().getTimeInMillis()>=(1000*60)){
+            if (calendar.getTimeInMillis() - s.getValue().getCalendar().getTimeInMillis()>=(1000*60*30)){
                 sessions.remove(s.getKey());
             }
         }
