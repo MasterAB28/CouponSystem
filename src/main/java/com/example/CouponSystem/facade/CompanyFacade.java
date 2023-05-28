@@ -49,7 +49,7 @@ public class CompanyFacade extends ClientFacade {
      * @throws ExceptionCoupons
      */
     public void addCoupon(Coupon coupon) throws ExceptionCoupons {
-        if (coupon.getEndDate().after(coupon.getStartDate()) || coupon.getEndDate().equals(coupon.getStartDate())) {
+        if (coupon.getEndDate().after(coupon.getStartDate())) {
             coupon.setCompany(getCompanyDetails());
             if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(), coupon.getCompany().getId())) {
                 throw new ExceptionCoupons("This title is exists for your company");
@@ -68,7 +68,7 @@ public class CompanyFacade extends ClientFacade {
      * @throws ExceptionCoupons if the coupon is not exist
      */
     public void updateCoupon(Coupon coupon) throws ExceptionCoupons {
-        if (coupon.getEndDate().after(coupon.getStartDate()) || coupon.getEndDate().equals(coupon.getStartDate())) {
+        if (coupon.getEndDate().after(coupon.getStartDate())) {
             if (!couponRepo.findById(coupon.getId()).orElseThrow(() -> new ExceptionCoupons("The id not found")).getTitle().equals(coupon.getTitle())) {
                 if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(), coupon.getCompany().getId())) {
                     throw new ExceptionCoupons("This title is exists for your company");
