@@ -39,7 +39,7 @@ public class TokenFilter extends OncePerRequestFilter {
             }
         }catch (Exception e){
             response.setStatus(403);
-            response.getWriter().write("Invalid to your role!");
+            response.getWriter().write(e.getMessage());
         }
     }
     @Override
