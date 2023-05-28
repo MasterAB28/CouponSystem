@@ -46,11 +46,15 @@ public class CompanyFacade extends ClientFacade{
      * @throws ExceptionCoupons
      */
     public void addCoupon(Coupon coupon) throws ExceptionCoupons {
-        coupon.setCompany(getCompanyDetails());
-        if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(),coupon.getCompany().getId())) {
-            throw new ExceptionCoupons("This title is exists for your company");
+        if (coupon.getEndDate().after(coupon.getStartDate()) || coupon.getEndDate().equals(coupon.getStartDate())) {
+            coupon.setCompany(getCompanyDetails());
+            if (couponRepo.existsByTitleAndCompanyId(coupon.getTitle(), coupon.getCompany().getId())) {
+                throw new ExceptionCoupons("This title is exists for your company");
+            }
+            couponRepo.save(coupon);
+        }else {
+            throw new ExceptionCoupons("End date must be after start date");
         }
-        couponRepo.save(coupon);
     }
 
     /**
